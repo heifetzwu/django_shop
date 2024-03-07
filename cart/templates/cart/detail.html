@@ -43,6 +43,7 @@
                                 <form action="{% url "cart:cart_add" product.id %}" method="post">
                                     {% csrf_token %}
                                     {% bootstrap_field item.update_quantity_form.quantity show_label=False %}
+                                    {% comment %} {{ item.update_quantity_form.quantity }} {% endcomment %}
                                     {% bootstrap_field item.update_quantity_form.update %}
                                     {% buttons %}
                                         <button type="submit" class="btn btn-success btn-product">
@@ -57,7 +58,7 @@
 
                             <td class="col-sm-1 col-md-1">
                                 <a href="{% url "cart:cart_remove" product.id %}" class="btn btn-danger">
-                                    <i class="glyphicon glyphicon-remove" aria-hidden="true"></i> Remove
+                                    <i class="glyphicon glyphicon-remove-sign" aria-hidden="true"></i> Remove
                                 </a>
                             </td>
                         </tr>

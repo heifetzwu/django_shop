@@ -80,7 +80,9 @@ WSGI_APPLICATION = 'django_shop_tutorial.wsgi.application'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # django-paypal settings
-PAYPAL_RECEIVER_EMAIL = 'dikeooel3ski-facilitator@gmail.com'
+# PAYPAL_RECEIVER_EMAIL = 'dikeooel3ski-facilitator@gmail.com'
+PAYPAL_RECEIVER_EMAIL = 'sb-mzmxe29757227@business.example.com'
+# buyer = sb-47xgek29757229@personal.example.com
 PAYPAL_TEST = True
 
 
@@ -193,9 +195,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+#     # another directory ...
+# ]
 
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CART_SESSION_ID = 'cart'
+# CORS_ALLOWED_ORIGINS
+CSRF_TRUSTED_ORIGINS = ["https://a9b1-123-241-198-209.ngrok-free.app"]
+# CSRF_TRUSTED_ORIGINS = ["*"]

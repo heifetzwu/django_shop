@@ -19,6 +19,9 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        r = reverse('shop:product_list_by_category',
+                       args=[self.slug])
+        print ("### cat r" , r)
         return reverse('shop:product_list_by_category',
                        args=[self.slug])
 
@@ -48,5 +51,8 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        r = reverse('shop:product_detail',
+                       args=[self.id, self.slug])
+        print ("### prod r" , r)
         return reverse('shop:product_detail',
                        args=[self.id, self.slug])

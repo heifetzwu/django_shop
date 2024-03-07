@@ -31,7 +31,9 @@
                         <h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
                         <form action="{% url "cart:cart_add" product.id %}" method="post">
                             {% csrf_token %}
-                            {% bootstrap_form cart_product_form %}
+                            {% bootstrap_form cart_product_form %} 
+                            {% comment %} {{ cart_product_form }} {% endcomment %}
+
                             {% buttons %}
                                 <button type="submit" class="btn btn-success btn-product">
                                     <span class="glyphicon glyphicon-shopping-cart"></span> Add to cart

@@ -25,10 +25,13 @@ urlpatterns = [
     re_path(r'^orders/', include(('orders.urls','orders'), namespace='orders')),
     re_path(r'^payment/', include(('payment.urls','payment'),namespace='payment')),
     re_path(r'^paypal/', include('paypal.standard.ipn.urls')),
-    re_path(r'^', include(('shop.urls','shop'), namespace="shop")),
+    # namespace 應該可以拿掉
+    # re_path(r'^', include(('shop.urls','shop'), namespace="shop2")),
+    re_path(r'^', include(('shop.urls','shop'))),
 
 ]
 
 if settings.DEBUG:
+    print ("### settings.MEDIA_URL=",settings.MEDIA_URL)
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
