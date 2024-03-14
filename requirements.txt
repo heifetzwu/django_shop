@@ -1,4 +1,13 @@
-Django
-django-paypal
-django-bootstrap3
-Pillow
+asgiref==3.7.2
+certifi==2024.2.2
+charset-normalizer==3.3.2
+Django==5.0.2
+django-bootstrap3==23.6
+django-paypal==2.0
+idna==3.6
+pillow==10.2.0
+pytz==2024.1
+requests==2.31.0
+sqlparse==0.4.4
+tzdata==2024.1
+urllib3==2.2.1

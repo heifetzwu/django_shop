@@ -10,18 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-import os, configparser
-
+import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-inifile = os.path.join(BASE_DIR, 'settings.ini')
-config = configparser.ConfigParser()
-config.read('settings.ini')
-DB_Profile = {
-    'user': config['mysql']['user'],
-    'password': config['mysql']['password']
-}
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -93,8 +86,11 @@ PAYPAL_RECEIVER_EMAIL = 'sb-mzmxe29757227@business.example.com'
 PAYPAL_TEST = True
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+
 
 # docker run --name mysql8 -p 3307:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql:8.0.17
 """
@@ -118,9 +114,9 @@ DATABASES = {
         # use mysql as database
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shop',
-        'USER': DB_Profile['user'],
-        'PASSWORD': DB_Profile['password'],
-        'HOST': '127.0.0.1',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
         'PORT': '3307',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -247,3 +243,15 @@ CART_SESSION_ID = 'cart'
 # CORS_ALLOWED_ORIGINS
 CSRF_TRUSTED_ORIGINS = ["https://a9b1-123-241-198-209.ngrok-free.app"]
 # CSRF_TRUSTED_ORIGINS = ["*"]
+
+# SSL
+# secure proxy SSL header and secure cookies
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# session expire at browser close
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# wsgi scheme
+os.environ['wsgi.url_scheme'] = 'https'

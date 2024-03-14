@@ -10,14 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-import os, configparser
+import os,configparser
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-inifile = os.path.join(BASE_DIR, 'settings.ini')
+inifile = os.path.join(BASE_DIR, 'settings_web_server2.ini')
 config = configparser.ConfigParser()
-config.read('settings.ini')
+config.read(inifile)
 DB_Profile = {
     'user': config['mysql']['user'],
     'password': config['mysql']['password']
@@ -105,7 +105,7 @@ INSERT INTO shop_category (name, slug) VALUES ('food', 'food');
 """
 # sudo apt install pkg-config
 # pip install mysqlclient
-
+    
 DATABASES_sqllite3 = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -120,8 +120,8 @@ DATABASES = {
         'NAME': 'shop',
         'USER': DB_Profile['user'],
         'PASSWORD': DB_Profile['password'],
-        'HOST': '127.0.0.1',
-        'PORT': '3307',
+        'HOST': 'shop-mysql.c25olwezq8r9.us-east-1.rds.amazonaws.com',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
@@ -133,7 +133,7 @@ DATABASES = {
 }
 
 
-            
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -239,11 +239,11 @@ USE_TZ = True
 # ]
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CART_SESSION_ID = 'cart'
 # CORS_ALLOWED_ORIGINS
-CSRF_TRUSTED_ORIGINS = ["https://a9b1-123-241-198-209.ngrok-free.app"]
+# CSRF_TRUSTED_ORIGINS = ["https://a9b1-123-241-198-209.ngrok-free.app"]
 # CSRF_TRUSTED_ORIGINS = ["*"]
