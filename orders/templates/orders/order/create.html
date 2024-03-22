@@ -27,9 +27,14 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
-            <button type="submit" class="btn btn-success btn-product">
-                <span class="glyphicon glyphicon-shopping-cart"></span> Place order
+            <button type="submit" class="btn btn-success btn-product" formaction="?payby=paypal">
+                <span class="glyphicon glyphicon-shopping-cart"></span> Place order (Paypal)
             </button>
+            <button type="submit" class="btn btn-success btn-product" formaction="?payby=ecpay">
+                <span class="glyphicon glyphicon-shopping-cart"></span> Place order (ECPay)
+            </button>          
+
+
         {% endbuttons %}
     </form>
 

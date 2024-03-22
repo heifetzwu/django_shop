@@ -7,10 +7,6 @@ from orders.models import Order
 
 
 def payment_notification(sender, **kwargs):
-    print ("##### payment_notification")
-    print ("*" * 200)
-    print ("sender: ", sender)
-    
     ipn_obj = sender
     if ipn_obj.payment_status == ST_PP_COMPLETED:
 

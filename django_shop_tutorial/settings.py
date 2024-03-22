@@ -22,6 +22,13 @@ DB_Profile = {
     'user': config['mysql']['user'],
     'password': config['mysql']['password']
 }
+AWS_Profile = {
+    'id': config['aws']['id'],
+    'key': config['aws']['key'],
+    'AWS_STORAGE_BUCKET_NAME' : config['aws']['bucket_name']
+}
+USE_S3 = config['main']['USE_S3']
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -50,6 +57,7 @@ INSTALLED_APPS = [
     'orders',
     'paypal.standard.ipn',
     'payment',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -85,6 +93,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_shop_tutorial.wsgi.application'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Google帳號/應用程式密碼  django_shop 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'xxx@mail.com'
+# EMAIL_HOST_PASSWORD = 'xxxxyyyyxxxxyyyy'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
+
 
 # django-paypal settings
 # PAYPAL_RECEIVER_EMAIL = 'dikeooel3ski-facilitator@gmail.com'
@@ -131,9 +148,13 @@ DATABASES = {
         }         
     }
 }
+ECPAY = {
+    'MerchantID': '3002607',
+    'HashKey': 'pwFHCqoQZGmho4w6',
+    'HashIV': 'EkRm7iFT261dpevs',
+}
 
-
-            
+           
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -238,12 +259,33 @@ USE_TZ = True
 #     # another directory ...
 # ]
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = AWS_Profile['id']
+    AWS_SECRET_ACCESS_KEY = AWS_Profile['key']
+    AWS_STORAGE_BUCKET_NAME = AWS_Profile['AWS_STORAGE_BUCKET_NAME']
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # s3 static settings
+    AWS_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'django_shop_tutorial.storage_backends.StaticStorage'
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    # DEFAULT_FILE_STORAGE = 'django_shop_tutorial.storage_backends.PublicMediaStorage'
+    DEFAULT_FILE_STORAGE = 'django_shop_tutorial.storage_backends.PrivateMediaStorage'
+else:
+    # STATIC_URL = '/staticfiles/'
+    # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CART_SESSION_ID = 'cart'
 # CORS_ALLOWED_ORIGINS
-CSRF_TRUSTED_ORIGINS = ["https://a9b1-123-241-198-209.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://1599-123-241-198-209.ngrok-free.app"]
 # CSRF_TRUSTED_ORIGINS = ["*"]
+

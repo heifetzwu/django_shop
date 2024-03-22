@@ -2,6 +2,7 @@ from django.db import models
 
 from shop.models import Product
 
+ORDER_PREFIX = 'jackkkk'
 
 class Order(models.Model):
     first_name = models.CharField(max_length=50)
@@ -13,6 +14,8 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
+    order_no = models.CharField(max_length=20, blank=True)
+
 
     class Meta:
         ordering = ('-created',)
