@@ -12,10 +12,14 @@ from django.http import HttpResponse
 from orders.models import Order, OrderItem
 
 # placeholder
-import importlib.util, datetime
+import importlib.util, datetime, os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+modfile = os.path.join(BASE_DIR, 'payment/ecpay_payment_sdk.py')
+
 spec = importlib.util.spec_from_file_location(
     "ecpay_payment_sdk",
-    "payment/ecpay_payment_sdk.py"
+    modfile
 )
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
