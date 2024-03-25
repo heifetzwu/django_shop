@@ -17,10 +17,12 @@ import os, configparser
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 inifile = os.path.join(BASE_DIR, 'settings.ini')
 config = configparser.ConfigParser()
-config.read('settings.ini')
+config.read(inifile)
 DB_Profile = {
     'user': config['mysql']['user'],
-    'password': config['mysql']['password']
+    'password': config['mysql']['password'],
+    'host': config['mysql']['host'],
+    'port': config['mysql']['port']
 }
 AWS_Profile = {
     'id': config['aws']['id'],
@@ -137,8 +139,8 @@ DATABASES = {
         'NAME': 'shop',
         'USER': DB_Profile['user'],
         'PASSWORD': DB_Profile['password'],
-        'HOST': '127.0.0.1',
-        'PORT': '3307',
+        'HOST': DB_Profile['host'],
+        'PORT': DB_Profile['port'],
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
