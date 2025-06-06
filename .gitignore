@@ -105,3 +105,4 @@ ENV/
 
 *.sqlite3
 # db.sqlite3
+static/*

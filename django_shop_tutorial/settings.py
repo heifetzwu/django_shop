@@ -132,7 +132,7 @@ DATABASES_sqllite3 = {
     }
 }
 
-DATABASES = {
+DATABASES_rds = {
     'default': {
         # use mysql as database
         'ENGINE': 'django.db.backends.mysql',
@@ -150,6 +150,28 @@ DATABASES = {
         }         
     }
 }
+
+DATABASES_local = {
+    'default': {
+        # use mysql as database
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shop',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '3307',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+            'use_unicode': True,           
+            'init_command': "SET foreign_key_checks = 0",
+            'init_command': "SET default_storage_engine = InnoDB"
+        }         
+    }
+}
+
+DATABASES = DATABASES_rds
+
 ECPAY = {
     'MerchantID': '3002607',
     'HashKey': 'pwFHCqoQZGmho4w6',
@@ -261,12 +283,69 @@ USE_TZ = True
 #     # another directory ...
 # ]
 
-if USE_S3:
+
+if  eval(USE_S3):
+    AWS_ACCESS_KEY_ID = AWS_Profile['id']
+    AWS_SECRET_ACCESS_KEY = AWS_Profile['key']
+    AWS_STORAGE_BUCKET_NAME = AWS_Profile['AWS_STORAGE_BUCKET_NAME']
+    AWS_S3_REGION_NAME = 'us-east-1' 
+    # AWS_DEFAULT_ACL = 'public-read'
+    AWS_DEFAULT_ACL = 'private'
+    # AWS_DEFAULT_ACL = None
+    # AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_CUSTOM_DOMAIN = None
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_QUERYSTRING_AUTH = True
+    # s3 static settings
+    AWS_LOCATION = 'static'
+    AWS_S3_SIGNATURE_VERSION = 'v4'
+    AWS_S3_FILE_OVERWRITE = False  # 避免文件名衝突
+    AWS_S3_VERIFY = True  # 驗證SSL證書
+    # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/private/"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STORAGES = {
+        "default": {  # 媒體文件
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": AWS_ACCESS_KEY_ID,
+                "secret_key": AWS_SECRET_ACCESS_KEY,
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "region_name": AWS_S3_REGION_NAME,
+                "default_acl": AWS_DEFAULT_ACL,
+                "querystring_auth": AWS_QUERYSTRING_AUTH,
+                "object_parameters": AWS_S3_OBJECT_PARAMETERS,
+                # "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+                "signature_version": AWS_S3_SIGNATURE_VERSION,
+                "location": "private",
+            },
+        },
+        "staticfiles": {  # 靜態文件
+            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+            "OPTIONS": {
+                "access_key": AWS_ACCESS_KEY_ID,
+                "secret_key": AWS_SECRET_ACCESS_KEY,
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "region_name": AWS_S3_REGION_NAME,
+                # "default_acl": 'public-read',
+                # "querystring_auth": False,
+                "default_acl": AWS_DEFAULT_ACL,
+                "querystring_auth": AWS_QUERYSTRING_AUTH,
+                "object_parameters": AWS_S3_OBJECT_PARAMETERS,
+                # "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+                "location": "static",
+            },
+        },
+    }
+
+elif False:
     # aws settings
     AWS_ACCESS_KEY_ID = AWS_Profile['id']
     AWS_SECRET_ACCESS_KEY = AWS_Profile['key']
     AWS_STORAGE_BUCKET_NAME = AWS_Profile['AWS_STORAGE_BUCKET_NAME']
     AWS_DEFAULT_ACL = 'public-read'
+    # AWS_DEFAULT_ACL = 'private'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     # s3 static settings
@@ -277,7 +356,9 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     # DEFAULT_FILE_STORAGE = 'django_shop_tutorial.storage_backends.PublicMediaStorage'
+    
     DEFAULT_FILE_STORAGE = 'django_shop_tutorial.storage_backends.PrivateMediaStorage'
+    # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
     # STATIC_URL = '/staticfiles/'
     # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
