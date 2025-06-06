@@ -30,7 +30,7 @@ AWS_Profile = {
     'AWS_STORAGE_BUCKET_NAME' : config['aws']['bucket_name']
 }
 USE_S3 = config['main']['USE_S3']
-
+USE_ROLE = config['main']['USE_ROLE']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -282,11 +282,12 @@ USE_TZ = True
 #     os.path.join(BASE_DIR, "static"),
 #     # another directory ...
 # ]
+if not eval(USE_ROLE):
+    AWS_ACCESS_KEY_ID = AWS_Profile['id']
+    AWS_SECRET_ACCESS_KEY = AWS_Profile['key']
 
 
 if  eval(USE_S3):
-    AWS_ACCESS_KEY_ID = AWS_Profile['id']
-    AWS_SECRET_ACCESS_KEY = AWS_Profile['key']
     AWS_STORAGE_BUCKET_NAME = AWS_Profile['AWS_STORAGE_BUCKET_NAME']
     AWS_S3_REGION_NAME = 'us-east-1' 
     # AWS_DEFAULT_ACL = 'public-read'
@@ -309,8 +310,8 @@ if  eval(USE_S3):
         "default": {  # 媒體文件
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
             "OPTIONS": {
-                "access_key": AWS_ACCESS_KEY_ID,
-                "secret_key": AWS_SECRET_ACCESS_KEY,
+                # "access_key": AWS_ACCESS_KEY_ID,
+                # "secret_key": AWS_SECRET_ACCESS_KEY,
                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
                 "region_name": AWS_S3_REGION_NAME,
                 "default_acl": AWS_DEFAULT_ACL,
@@ -324,8 +325,8 @@ if  eval(USE_S3):
         "staticfiles": {  # 靜態文件
             "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
             "OPTIONS": {
-                "access_key": AWS_ACCESS_KEY_ID,
-                "secret_key": AWS_SECRET_ACCESS_KEY,
+                # "access_key": AWS_ACCESS_KEY_ID,
+                # "secret_key": AWS_SECRET_ACCESS_KEY,
                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
                 "region_name": AWS_S3_REGION_NAME,
                 # "default_acl": 'public-read',
